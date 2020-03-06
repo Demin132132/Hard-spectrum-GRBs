@@ -67,18 +67,20 @@ def get_canal (PHA1, PHA2, PHA3, data, CAL, T, canal, ID):
 		for i in range(3, len(matrix)):
 			if CAL*matrix[i][0] >= data.loc['Emin'] and CAL*matrix[i][0] < data.loc['Emax']:
 
-				if j > 4:
+				if j > 4 and i != len(matrix)-1 and i != 3:
+	
 
-					if matrix[i][j] == 0 and canal in ['G1', 'G2', 'G3']  and i != 3 and i != len(matrix)-1:	
+					if matrix[i][j] == 0 and canal in ['G1', 'G2', 'G3']:	
 						f = ' f'
 						matrix[i][j] = matrix1[i][j]
 
 						
-					if j < len(matrix[i])-1 and matrix[i][j] == 0 and matrix[i][j+1] != 0 and j <= len(T) and canal in ['G1', 'G2', 'G3', 'G4'] and i != 3 and i != len(matrix)-1:
+					if j < len(matrix[i])-1 and matrix[i][j] == 0 and matrix[i][j+1] != 0 and j <= len(T) and canal in ['G1', 'G2', 'G3', 'G4']:
 						f = ' f'
-						matrix[i][j] = matrix[i][j-1]*matrix[1][j]/matrix[1][j-1]		
+						matrix[i][j] = matrix[i][j-1]*matrix[1][j]/matrix[1][j-1]	
+					
 
-					elif j < len(matrix[i])-1 and matrix[i][j] == 0 and matrix[i][j+1] == 0 and j <= len(T) and canal in ['G1', 'G2', 'G3', 'G4'] and i != 3 and i != len(matrix)-1:			
+					elif j < len(matrix[i])-1 and matrix[i][j] == 0 and matrix[i][j+1] == 0 and j <= len(T) and canal in ['G1', 'G2', 'G3', 'G4']:			
 						wr = 'ID = {}, в канале {}, при энергии от {}, начиная со спектра S{} G = 0\n'.format(ID, canal, matrix[i][0], j+1)
 						ER = open('ER.txt', 'a')
 						ER.write(str(wr))
@@ -402,7 +404,7 @@ def main():
 
 			fig.update_layout(title_text = 'ID' + ID +  ff)
 			#py.offline.plot(fig, filename = 'test_vsplesk/' + ID + '.html')
-			fig.write_image('images/' + ID + '.jpg')
+			#fig.write_image('images/' + ID + '.jpg')
 
 			tabl.loc[i, 'ID'] = ID	
 			tabl.loc[i, 'Data'] = day_[ID]	
@@ -426,8 +428,8 @@ def main():
 	#pd.options.display.max_columns = 10000
 	print(tabl, file = TASK2, flush = True)
 
-
-
+	TASK.close()
+	TASK2.close()
 
 main()
 
